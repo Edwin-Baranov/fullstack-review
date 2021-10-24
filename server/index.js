@@ -1,9 +1,23 @@
+const github = require('../helpers/github.js');
+const db = require('../database');
 const express = require('express');
 let app = express();
 
+app.use(express.json())
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/repos', function (req, res) {
+  github.getReposByUsername(req.body.username, (repos) => {
+    db.save(repos, (err, result) => {
+      if (!err) {
+        res.sendStatus(201);
+      }
+      else {
+        console.log(err);
+        res.sendStatus(500);
+      }
+    })
+  });
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
@@ -17,7 +31,6 @@ app.get('/repos', function (req, res) {
 
 let port = 1128;
 
-app.listen(port, function() {
+app.listen(port, function () {
   console.log(`listening on port ${port}`);
 });
-

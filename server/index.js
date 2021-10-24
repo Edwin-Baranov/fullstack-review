@@ -7,6 +7,7 @@ app.use(express.json())
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/repos', function (req, res) {
+  console.log('Got a post. Body is', req.body);
   github.getReposByUsername(req.body.username, (repos) => {
     db.save(repos, (err, result) => {
       if (!err) {

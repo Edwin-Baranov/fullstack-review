@@ -11,7 +11,9 @@ app.post('/repos', function (req, res) {
   github.getReposByUsername(req.body.username, (repos) => {
     db.save(repos, (err, result) => {
       if (!err) {
-        res.sendStatus(201);
+        db.get25TopForkers((results) => {
+          res.status(201).send(results);
+        })
       }
       else {
         console.log(err);
@@ -28,6 +30,7 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
+  db.get25TopForkers((results) => { res.status(200).send(results)});
 });
 
 let port = 1128;

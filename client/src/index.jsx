@@ -10,18 +10,27 @@ class App extends React.Component {
     this.state = {
       repos: []
     }
+  }
 
+  componentDidMount() {
+    $.ajax({
+      url: 'http://localhost:1128/repos',
+      type: 'GET',
+      dataType: 'json',
+      success: (data) => {this.setState({'repos': data})}
+    })
   }
 
   search (term) {
     console.log(`${term} was searched`);
-    // TODO
+
     $.ajax({
       url: 'http://localhost:1128/repos',
       type: 'POST',
       contentType: 'application/json',
       dataType: 'json',
-      data: JSON.stringify({ 'username': term})
+      data: JSON.stringify({ 'username': term }),
+      success: (data) => {this.setState({'repos': data})}
     })
   }
 

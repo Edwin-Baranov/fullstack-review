@@ -29,7 +29,7 @@ let save = (repoArr, callback) => {
     let ownerName = repo.owner.login;
     let ownerUrl = repo.owner.html_url;
     let forksNumber = repo.forks_count;
-    
+
     let repoObject = { repoName, repoUrl, ownerName, ownerUrl, forksNumber };
 
     return Repo.updateOne({ _id }, repoObject, {upsert: true, setDefaultsOnInsert: true}).exec();
@@ -40,4 +40,10 @@ let save = (repoArr, callback) => {
     .catch((err) => { callback(err) });
 }
 
+let get25TopForkers = (callback) => {
+  Repo.find().sort('-forksNumber').limit(25)
+  .then((results) => {callback(results)});
+}
+
 module.exports.save = save;
+module.exports.get25TopForkers = get25TopForkers;
